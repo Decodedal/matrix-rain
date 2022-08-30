@@ -5,7 +5,7 @@ canvas.height = window.innerHeight;
 //sets symbals that will be used for the effect
 class Symbol{
     constructor(x_pos, y_pos, fontSize, canvasHeight){
-         this.characters = 'abcdefghijklmnopqrstuvwxyz';
+         this.characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ(❁´◡`❁)';
          this.x_pos = x_pos;
          this.y_pos = y_pos;
          this.fontSize = fontSize;
@@ -14,9 +14,8 @@ class Symbol{
     }
     draw(context){
         this.text = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
-        context.fillStyle = "#0aff0a";
         context.fillText(this.text, this.x_pos * this.fontSize ,this.y_pos * this.fontSize);
-        if(this.y_pos * this.fontSize > this.canvasHeight){
+        if(this.y_pos * this.fontSize > this.canvasHeight && Math.random() > 0.9){
             this.y_pos = 0;
         } else{
             this.y_pos += 1
@@ -43,11 +42,26 @@ class Effect{
 }
 
 const effect = new Effect(canvas.width, canvas.height);
+let lastTime = 0;
+const fps = 15;
+const nextFrame = 1000/fps;
+let timer = 0;
 
-function animate(){
+function animate(timeStamp){
+       const deltaTime = timeStamp - lastTime;
+       lastTime =timeStamp;
+       if(timer > nextFrame){
+       ctx.fillStyle = 'rgba(0,0,0,0.05)';
+       ctx.textAlign = 'center';
+       ctx.fillRect(0,0,canvas.width, canvas.height)
+       ctx.fillStyle = "#0aff0a";
        ctx.font = effect.fontSize + 'px monospace';
        effect.symbols.forEach(symbol => symbol.draw(ctx))
-       requestAnimationFrame(animate)
+       timer = 0;   
+    } else{
+        timer += deltaTime;
+    }
+       requestAnimationFrame(animate);
 } 
 //starts animation
-animate();
+animate(0);
