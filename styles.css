@@ -8,7 +8,7 @@ body{
     background: black;
 }
 canvas{
-    background:black;
+    /* background:blue; */
     position: absolute;
     top: 0;
     left:0;
